@@ -1,0 +1,140 @@
+package com.example.kivipaperisakset;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.Random;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button kivibutton;
+    Button papeributton;
+    Button saksetbutton;
+    ImageView pelaajavalinta;
+    ImageView puhelinvalintakuva;
+    TextView pelaajateksti;
+    TextView puhelinteksti;
+    int pelaajapisteet=0;
+    int puhelinpisteet=0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        kivibutton = (Button) findViewById(R.id.button4);
+        papeributton = (Button) findViewById(R.id.button6);
+        saksetbutton = (Button) findViewById(R.id.button5);
+        pelaajateksti = (TextView) findViewById(R.id.pelaajatxt);
+        puhelinteksti = (TextView) findViewById(R.id.puhelintxt);
+        pelaajavalinta = (ImageView) findViewById(R.id.pelaajavalinta);
+        puhelinvalintakuva = (ImageView) findViewById(R.id.puhelinvalinta);
+
+
+        //nappien toiminnot
+        kivibutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pelaajavalinta.setImageResource(R.drawable.rock);
+                String message = pelaa("kivi");
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        papeributton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pelaajavalinta.setImageResource(R.drawable.paper);
+                String message = pelaa("paperi");
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        saksetbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pelaajavalinta.setImageResource(R.drawable.scissors);
+                String message = pelaa("sakset");
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+    }
+
+    //täs arvotaan voittaja ja annetaan pisteet
+    public String pelaa(String valinta)
+    {
+        //arvotaan puhelimelle valinta, ei kuitenkaan haluta että aina sama voittaa
+        String puhelinValinta = "";
+        Random r = new Random();
+        int puhelinValintaNumero = r.nextInt(3);
+
+        if (puhelinValintaNumero == 0) {
+            puhelinValinta = "kivi";
+        }else
+        if (puhelinValintaNumero == 1) {
+            puhelinValinta = "paperi";
+        }else
+        if (puhelinValintaNumero == 2) {
+            puhelinValinta = "sakset";
+        }
+
+        //annetaan kuva puhelimen valinnalle
+        if (puhelinValinta == "kivi")
+        {
+            puhelinvalintakuva.setImageResource(R.drawable.rock);
+        }else
+        if (puhelinValinta == "paperi")
+        {
+            puhelinvalintakuva.setImageResource(R.drawable.paper);
+        }else
+        if (puhelinValinta == "sakset")
+        {
+            puhelinvalintakuva.setImageResource(R.drawable.scissors);
+        }
+
+        //verrataan valintoja, annetaan pisteet ja lätkästään ne näytölle
+        if (puhelinValinta == valinta)
+        {
+            //jos valinnat on samat niin sehän on tietty tasapeli
+            return "Tasapeli!";
+        }else
+        if (puhelinValinta == "kivi" && valinta == "paperi")
+        {
+            //ensinnä "pelaaja voittaa" scenaariot
+            pelaajapisteet++;
+            pelaajateksti.setText("Pelaaja: " + Integer.toString(pelaajapisteet));
+            return "Pelaaja voitti!";
+        }else
+        if (puhelinValinta == "paperi" && valinta == "sakset")
+        {
+            pelaajapisteet++;
+            pelaajateksti.setText("Pelaaja: " + Integer.toString(pelaajapisteet));
+            return "Pelaaja voitti!";
+        }else
+        if (puhelinValinta == "sakset" && valinta == "kivi")
+        {
+            pelaajapisteet++;
+            pelaajateksti.setText("Pelaaja: " + Integer.toString(pelaajapisteet));
+            return "Pelaaja voitti!";
+        }else {
+            //tässä on listattu vain scenaariot missä pelaaja voittaa
+            //sillä jos ei tule tasapeliä tai pelaaja ei voita niin silloinhan
+            //puhelin voittaa
+            puhelinpisteet++;
+            //aikasemmissa lisäsin ton numeron muuntamalla integeristä stringiksi
+            //mutta se ilmeisesti onnistuu ihan näinki
+            puhelinteksti.setText("Puhelin: " + puhelinpisteet);
+            return "Puhelin voitti!";
+        }
+    }
+}
